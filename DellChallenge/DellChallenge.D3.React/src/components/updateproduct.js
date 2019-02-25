@@ -44,12 +44,18 @@ class NewProduct extends Component {
     });
   };
 
-
+componentDidMount(){
+  this.setState({
+    Name: this.props.location.state.name,
+    Category : this.props.location.state.category
+  })
+}
 
   render() {
+    //console.log("''",this.props)
     return (
       <form onSubmit={this.handleSubmit}>
-        <h4>Add new Product</h4>
+        <h4>Update Product</h4>
         <div className="form-group has-danger">
           <label className="control-label" htmlFor="Name">
             Name
@@ -96,7 +102,7 @@ class NewProduct extends Component {
           <button 
           className="btn btn-primary"
           disabled={!this.state.Category && !this.state.Name}
-          >Submit</button>
+          >Update</button>
         </div>
         <Validation />
       </form>

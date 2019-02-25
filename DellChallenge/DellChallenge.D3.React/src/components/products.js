@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Validation from "../validation";
+import { withRouter } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
 class ProductList extends React.Component {
   constructor(props) {
@@ -7,7 +9,7 @@ class ProductList extends React.Component {
     this.state = {
       error: null,
       isLoaded: false,
-      items: []
+      items: []      
     };
   }
 
@@ -18,7 +20,9 @@ class ProductList extends React.Component {
         result => {
           this.setState({
             isLoaded: true,
-            items: result
+            items: result,
+            name:null,
+            category:null
           });
         },
         // Note: it's important to handle errors here
@@ -33,6 +37,30 @@ class ProductList extends React.Component {
       );
   }
 
+  handleClick(el) {
+    console.log(el)
+    // <Redirect to='/componentURL' />
+      this.props.history.push('/dashboard')
+   
+  }
+
+  setRedirect = (name,category) => {
+    console.log(name,category)
+    this.setState({
+      redirect: true,
+      name:name,
+      category:category
+    })
+  }
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect  to={{
+        pathname: '/updateproduct',
+        state: { name:this.state.name, category:this.state.category }
+    }}/>
+    }
+  }
+
   render() {
     const { error, isLoaded, items } = this.state;
     if (error) {
@@ -40,11 +68,13 @@ class ProductList extends React.Component {
     } else if (!isLoaded) {
       return <p>Loading...</p>;
     } else {
+      
       return (
-          <ul>
+        
+          <ul>{this.renderRedirect()}
             {items.map(item => (
-              <li key={item.id}>
-                {item.name} - {item.category}
+              <li className="p-2" key={item.id}>
+                {item.name} - {item.category} <button type="button" className="btn btn-primary btn-sm" onClick={()=>this.setRedirect(item.name, item.category)} value1={1}>Update</button> 
               </li>
             ))}
           </ul>
@@ -64,4 +94,4 @@ class Products extends Component {
     );
   }
 }
-export default Products;
+export default withRouter(Products);
